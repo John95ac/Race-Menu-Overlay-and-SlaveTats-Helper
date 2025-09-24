@@ -6,66 +6,17 @@ Convert body paint mods RaceMenu Overlay to SlaveTats and vice versa, plus being
 
 ### Prerequisites
 
-- **Python 3.8+**: Download from [python.org](https://www.python.org/downloads/windows/). During installation, ensure 'Add Python to PATH' is checked.
-- **PyQt5**: Install via pip: `pip install PyQt5`.
-- **Pillow**: Required for DDS texture support (including BC7 format): `pip install Pillow pillow_bc7`.
+- **Creation Kit**: Download from [Steam](https://store.steampowered.com/app/1946180/Skyrim_Special_Edition_Creation_Kit/). You only need the ...\Steam\steamapps\common\Skyrim Special Edition\Papyrus Compiler\ folder to compile PEX files. No need to open the Creation Kit itself.
+- **SSEEdit**: Download from [Nexus Mods](https://www.nexusmods.com/skyrimspecialedition/mods/164). Required for automatic ESP/ESL plugin creation using the Pascal script.
+- **Papyrus Compiler App**: Download from [Nexus Mods](https://www.nexusmods.com/skyrimspecialedition/mods/23852). Recommended for easy Papyrus compilation, but you can use any program you prefer.
 - **Optional: 7-Zip**: For creating .7z archives (the tool falls back to .zip if not installed). Download from [7-zip.org](https://www.7-zip.org/).
-
-### Quick Use (EXE Recommended)
-
-The project is delivered in EXE format for quick use: just download the executable file (available in `distintos/` or releases) and run it wherever you want, without additional installation. The PYW file is completely optional for those who prefer to run from source code.
-
-If you use the PYW:
-
-1. Clone or download the repository to a folder (e.g., `j:/Monitor/BH NPCs/Race Menu HELP V2`).
-2. Open a terminal or command prompt in the project directory.
-3. Install dependencies: `pip install PyQt5 Pillow pillow_bc7`.
-4. Run the tool: `python 020_Race_Menu_psc_creator.pyw`.
-   - Pre-built executables (via cx_Freeze or PyInstaller) are available in the `distintos/` folder—no additional setup needed.
-5. Ensure the `Data/` folder is present in the project root (contains assets like cat images for Tips tab, DDS backgrounds, and tutorial videos). Paths are relative to the working directory.
-
-**Notes**:
-
-- Tested on Windows 10; uses absolute paths. In VSCode, set the workspace to the project root for proper path resolution.
-- No internet connection required; all assets (e.g., Data/CAT images, Data/DDS backgrounds) are local.
-- If using a virtual environment, activate it before installing dependencies.
+- **For Generated Mods**:
+- [RaceMenu](https://www.nexusmods.com/skyrimspecialedition/mods/19080)
+- [SlaveTats](https://www.loverslab.com/topic/25398-slavetats/)
 
 ---
 
 ## What does it do?
-
-Race Menu and SlaveTats Helper is a user-friendly desktop application that assists Skyrim Special Edition modders in converting and organizing tattoo/overlay mods between RaceMenu (PSC scripts) and SlaveTats (JSON configurations). It simplifies workflows for creating new mods from raw DDS textures, generating scripts and configs, structuring mod files, and aiding Papyrus compilation. The tool supports both forward and reverse conversions, previewing textures, creating ZIP/7z packages, and managing backups to prevent data loss.
-
-Key features include:
-
-- **Drag-and-Drop Support**: Easily import JSON, PSC, or DDS files/folders directly into tabs for quick processing.
-- **Dark Theme Interface**: Custom frameless window with gradient backgrounds, intuitive menus (File for actions, Tabs for shortcuts, Help for About with links to [Nexus Mods](https://www.nexusmods.com/skyrimspecialedition/users/John1995ac?tab=user+files) and [GitHub](https://github.com/John95ac)), tooltips, and responsive UI elements.
-- **Progress Tracking**: Global progress bars and status updates for long operations like file copying or packing.
-- **Error Handling and Logging**: Detailed terminal output in each tab (green for info, red for errors, orange for warnings) to monitor processes and troubleshoot issues.
-- **Sound Feedback**: Plays a success sound on key actions like file generation.
-
----
-
-## Complete Workflow: SlaveTats to RaceMenu Overlay
-
-This workflow describes the 4 steps to convert a SlaveTats mod to a RaceMenu Overlay, integrating the Python tool for the first steps and the Pascal script for the third. Everything is done automatically where possible, with clear guides.
-
-1. **Step 1: Convert JSON to PSC and Organize DDS (Automatic with the Tool)**Use the "SlaveTats → RaceMenu (.psc Generator)" tab to import the SlaveTats JSON. The tool parses the entries (name, section, texture, area), generates the PSC script with AddBodyPaint/AddWarpaint calls, creates the `scripts/Source` folder, organizes the DDS files into `textures/Actors/Character/Overlays/<section>`, and copies the DDS files automatically. Result: PSC ready and DDS organized.
-2. **Step 2: Compile PSC to PEX (Multiple Methods, Tool Includes PCA Helper)**Compile the generated PSC to PEX using the Creation Kit, Visual Studio Code with SKSE, or PCA 2022.1 (recommended for speed). The tool includes the "PCA Papyrus Compile Helper" tab to simplify: configure paths in the INI, copy files to `overwrite/source/scripts`, select the PSC, compile with PCA, and move/clean the PEX automatically. Quiet modes reduce logs for better performance.
-3. **Step 3: Create ESP Plugin with Pascal Script in SSEdit**Use the Pascal script "Edit Scripts/0002 Race Menu Overlays ESP Creator .pas" in SSEdit (xEdit). The script duplicates a source plugin (select a new or existing destination), sets optional headers (author/description), copies all records with required masters, and for QUST records, allows entering the Papyrus script name (without extension or spaces) to update the FULL, EDID, and VMAD scriptName. After completing:
-
-   - Open the Quest and replace the FormID with your own plugin's FormID.
-   - Apply "Clean Masters" to your project.
-   - The script opens a video tutorial (Edit Scripts/012.mp4) to see the complete process.
-     Result: ESP/ESL plugin ready with the script assigned.
-4. **Step 4: Publish the Mod (Optional)**
-   If you publish, ask for permission from the original author of the SlaveTats mod. Remove references to SlaveTats from the mod (e.g., clean JSON or configs), compress it into a mod-friendly format (ZIP/7z), and upload it to Nexus or a similar platform. Ensure compatibility with SKSE/OBody.
-
-This end-to-end workflow efficiently converts SlaveTats mods to RaceMenu Overlays, with the tool covering steps 1-2 and the Pascal script covering step 3.
-
----
-
-## Main Tabs and Workflows
 
 The application uses a tabbed interface for organized workflows:
 
@@ -126,23 +77,6 @@ The application uses a tabbed interface for organized workflows:
 - **Backups**: Automatic timestamped backups for JSON/PSC in a `Backups` subfolder. Dedicated manager dialog to create/restore/list backups (accessible via "Backups" button in creator tabs).
 - **Compilation Assistance**: Copy to MO2 `overwrite/source/scripts` → compile with PCA → auto-move .pex and clean. Quiet modes reduce logs; emulator allows standalone use without MO2.
 
-The tool ensures safe operations with try-catch blocks, progress indicators, and detailed logging. For more details, check the [GitHub repository](https://github.com/John95ac) or [Nexus Mods page](https://www.nexusmods.com/skyrimspecialedition/users/John1995ac?tab/user+files).
-
----
-
-## Troubleshooting
-
-- **DDS Preview Issues**: Ensure Pillow with BC7 support is installed (`pip install pillow pillow_bc7`). If BC7 DDS fail to load, check the terminal for errors (e.g., "Failed to load"). Test with standard DDS files. Install plugins manually if needed.
-- **No 7z Packing**: Install 7-Zip for .7z archives; the tool automatically falls back to .zip (slower but functional).
-- **Paths Not Found**: The tool uses absolute paths relative to the working directory (project root). In VSCode, set the workspace to the project folder. For PCA helper, use the gear icon to configure routes (e.g., `source_path` for Source path).
-- **INI Configuration**: Edit `Data/PapyrusCompiler.ini` for PCA settings:
-  - [PCA] `QuietCopyStep=true` (silent file copying), `QuietPSCStep=true` (no code dumps), `QuietEndStep=true` (minimal cleanup logs), `AutoRunOnAllPex=true` (auto-move on .pex detection).
-  - [Route] `source_path` (Source folder), `scripts_path` (`overwrite/scripts`), `source_scripts_path` (`overwrite/source/scripts`).
-  - [StandAlone] `mo2emulator=true` (enables standalone MO2 emulator mode).
-    Changes are saved automatically and persist across sessions.
-- **Mod Compatibility**: This is a development tool, not an in-game plugin. Generated mods are for Skyrim Special Edition/AE and require SKSE, OBody Next Generation, and Address Library for SKSE Plugins in-game. Test in MO2 or Vortex.
-- **Performance Tips**: Close other applications during file operations or compilation. Enable Quiet MODE in PCA to reduce console output and improve responsiveness. Restart the tool via File > Restart (Ctrl+R) if the UI lags.
-
 ---
 
 ## Updates and Revisions
@@ -181,11 +115,7 @@ Special thanks to **[Mermaid](https://mermaid.js.org/)**, **[Excalidraw](https:/
 
 ## Requirements
 
-- **Core (Tool)**:RM_and_ST_Helper.exe or RM_and_ST_Helper_Python.pyw
-  [Creation_Kit](https://store.steampowered.com/app/1946180/Skyrim_Special_Edition_Creation_Kit/): you can download it here, we'll only need the ...\Steam\steamapps\common\Skyrim Special Edition\Papyrus Compiler\ which is necessary to compile PEX, nothing else, no need to even open it, just download.
-  [SSEEdit](https://www.nexusmods.com/skyrimspecialedition/mods/164).
-  [Papyrus_Compiler_App](https://www.nexusmods.com/skyrimspecialedition/mods/23852).
+- **Core (Tool)** :RM_and_ST_Helper.exe or RM_and_ST_Helper_Python.pyw [Creation_Kit](https://store.steampowered.com/app/1946180/Skyrim_Special_Edition_Creation_Kit/): you can download it here, we'll only need the ...\Steam\steamapps\common\Skyrim Special Edition\Papyrus Compiler\ which is necessary to compile PEX, nothing else, no need to even open it, just download. [SSEEdit](https://www.nexusmods.com/skyrimspecialedition/mods/164). [Papyrus_Compiler_App](https://www.nexusmods.com/skyrimspecialedition/mods/23852).
 - **For Generated Mods**:
-  [RaceMenu](https://www.nexusmods.com/skyrimspecialedition/mods/19080),
-  [SlaveTats](https://www.loverslab.com/topic/25398-slavetats/)
-- **Optional**: 7-Zip
+- [RaceMenu](https://www.nexusmods.com/skyrimspecialedition/mods/19080)
+- [SlaveTats](https://www.loverslab.com/topic/25398-slavetats/)
